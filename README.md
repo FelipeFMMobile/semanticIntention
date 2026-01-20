@@ -73,7 +73,7 @@ Notebook: semantic_stem_X_lemm e semantic_stem_X_lemm_2
 ```
 
 
-### Análise baseado em Stemming com Rede Neural LSTM Robusta (REVER) 
+### Análise baseado em Stemming com Rede Neural LSTM Robusta
 
 ```
 0         Pagar conta de luz           Outro       0.993414
