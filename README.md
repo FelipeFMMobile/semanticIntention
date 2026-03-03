@@ -14,9 +14,9 @@ Analise em database sintético básico e expandido. O resultado demonstra que a 
 
 * *Importante: Ambos apresentação overfitting por utilizar um database pequeno, mas com resultados bem distintos em um texto experimental.*
 
-- **Stemmatization com DistilBERT**: Aplica o pré processamento com base no modelo DistilBERT para embbeding dos textos, aplica o algoritimo de classificação Random Forest. Apesar de um embbeding grande, apresenta resultados inferiores a rede neural.
+- **Sentence-Transformer (MiniLM) + Random Forest**: Gera embeddings com `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (multilíngue) e classifica com Random Forest no notebook `semantic_distilBERT`. Não aplica stemmatização neste pipeline.
 
-- **Stemmatization LSTM com Banking77**: Aplica o melhor resultado encontrando usando Stemmatização sobre um dataset público Banking77 com a mesma rede LSTM para analisar o score. Atinge uma acurácia de 0.75 
+- **Stemming (inglês) + LSTM com Banking77**: Aplica tokenização em inglês com `SnowballStemmer("english")` e rede BiLSTM sobre o dataset público Banking77. Resultado atual salvo no notebook: acurácia de **0.7594** (macro F1 **0.75**, weighted F1 **0.76**).
 
 ### Similaridade LABSE
 ```
@@ -59,7 +59,7 @@ Notebook: semantic_stem_X_lemm e semantic_stem_X_lemm_2
 
 ```
 
-### Análise baseada em DistilBERT
+### Análise baseada em Sentence-Transformer (MiniLM) + Random Forest
 
 ```
                        texto     classe_pred  probabilidade
@@ -72,8 +72,9 @@ Notebook: semantic_stem_X_lemm e semantic_stem_X_lemm_2
 6          transfirir r$3,99        Cobrança            0.5
 ```
 
+Observação: no split sintético o notebook reporta métricas muito altas (`precision/recall/f1` de 1.00), mas na amostra manual acima existem erros de classificação. Portanto, a leitura qualitativa desse experimento deve ser feita com cautela.
 
-### Análise baseado em Stemming com Rede Neural LSTM Robusta (REVER) 
+### Execução de referência adicional (amostra antiga do notebook `semantic_distilBERT`) 
 
 ```
 0         Pagar conta de luz           Outro       0.993414
@@ -91,43 +92,16 @@ Notebook: semantic_distilBERT
 ### Análise baseado em Stemming com Rede Neural LSTM - DataSet Banking 77
 
 ```
-                                                   text  \
-182                I have a 1 euro fee on my statement.   
-1054  I have paid money into my account but it doesn...   
-2975             how do i add money with my apple watch   
-2457    I'm looking for the option to top up by cheque.   
-1782  Did my refund go through? It's not on my state...   
-1014  There appears to have been a reversion in my t...   
-767   The ATM gave me the wrong amount of cash today...   
-256   What fiat currencies are supported for holding...   
-83        Where do you guys acquire your exchange rate?   
-1588                              Why can't I get cash?   
+Sample (test):
+                                                   text                   category                 label_pred      prob
+964                         Where can the card be used?            card_acceptance            card_acceptance  0.346844
+1966  Why is there more then one charge on my card...  transaction_charged_twice  transaction_charged_twice  0.892991
+970      What are the rules to where I can use my...            card_acceptance           compromised_card  0.418855
+1350                     Who else can top up my ac...         topping_up_by_card              verify_top_up  0.371930
 
-                                              category  \
-182                          extra_charge_on_statement   
-1054  balance_not_updated_after_cheque_or_cash_deposit   
-2975                           apple_pay_or_google_pay   
-2457                          top_up_by_cash_or_cheque   
-1782                             Refund_not_showing_up   
-1014                                   top_up_reverted   
-767                      wrong_amount_of_cash_received   
-256                              fiat_currency_support   
-83                                       exchange_rate   
-1588                          declined_cash_withdrawal   
-
-                              label_pred      prob  
-182            extra_charge_on_statement  0.490520  o
-1054  transfer_not_received_by_recipient  0.305712  X
-2975             apple_pay_or_google_pay  0.962922  o
-2457            top_up_by_cash_or_cheque  0.619489  o
-1782               Refund_not_showing_up  0.906209  o
-1014                      pending_top_up  0.239173  X
-767       cash_withdrawal_not_recognised  0.781609  X
-256                fiat_currency_support  0.991938  o
-83                         exchange_rate  0.932884  o
-1588            declined_cash_withdrawal  0.410309  o
-
-score: 0.7593
+Acurácia: 0.7594
+Macro avg (P/R/F1): 0.77 / 0.75 / 0.75
+Weighted avg (P/R/F1): 0.77 / 0.76 / 0.76
 
 Notebook: semantic_lstm_banking77
 
@@ -141,4 +115,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author 
 Felipe Menezes, SÊnior iOS and Mobile Developer, Software Enginieer
 [![Swift](https://img.shields.io/badge/Linkedin-profile-blue)](https://www.linkedin.com/in/felipe-menezes-dev)
-
