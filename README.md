@@ -74,7 +74,7 @@ Notebook: semantic_stem_X_lemm e semantic_stem_X_lemm_2
 
 Observação: no split sintético o notebook reporta métricas muito altas (`precision/recall/f1` de 1.00), mas na amostra manual acima existem erros de classificação. Portanto, a leitura qualitativa desse experimento deve ser feita com cautela.
 
-### Execução de referência adicional (amostra antiga do notebook `semantic_distilBERT`) 
+### Análise baseado em Stemming com Rede Neural LSTM Robusta
 
 ```
 0         Pagar conta de luz           Outro       0.993414
